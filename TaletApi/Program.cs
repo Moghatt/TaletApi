@@ -19,7 +19,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowSpecificOrigins", builder =>
     {
         builder
-            .WithOrigins("https://talent-windows-app.azurewebsites.net", "http://127.0.0.1:4280", "http://localhost:3000","https://zealous-smoke-0a1391300.3.azurestaticapps.net") // Specify allowed origins
+            .WithOrigins("https://talent-windows-app.azurewebsites.net", "http://127.0.0.1:4280", "http://localhost:3000") // Specify allowed origins
             .AllowAnyMethod() // Allow any HTTP methods
             .AllowAnyHeader(); // Allow any HTTP headers
     });
