@@ -22,6 +22,7 @@ public partial class SalesDbContext : DbContext
     public virtual DbSet<Sale> Sales { get; set; }
 
     public virtual DbSet<Store> Stores { get; set; }
+    public virtual DbSet<User> Users { get; set; }
 
 
 
