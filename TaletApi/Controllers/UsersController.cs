@@ -8,6 +8,7 @@ using System;
 using TaletApi.Models;
 using TaletApi.Models.DTO;
 using TaletApi.utility;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace TaletApi.Controllers
 {
@@ -55,9 +56,9 @@ namespace TaletApi.Controllers
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
             var user = await _db.Users.FirstOrDefaultAsync(u => u.UserName == request.UserName);
-            if (user == null || !BycryptService.VerifyPassword(user.PasswordHash, request.Password))
+            if (user == null || !string.IsNullOrWhiteSpace(request.Password)||!BycryptService.VerifyPassword(user.PasswordHash, request.Password))
             {
-                return Unauthorized("Invalid username or password");
+                return Unauthorized("Invalid Credentials");
             }
 
             var token = _jwtService.GenerateToken(user);
@@ -68,7 +69,7 @@ namespace TaletApi.Controllers
             {
                 // Domain = "localhost",
                 // Path = "/",
-                HttpOnly = true, // Prevents JavaScript from accessing the cookie
+                HttpOnly = false, // Prevents JavaScript from accessing the cookie
                 SameSite = SameSiteMode.None, // Improve CSRF protection
                 Secure = true, // Send the cookie over HTTPS only in production
                 MaxAge = TimeSpan.FromDays(7) // Adjust the token expiration time as needed
