@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using NuGet.Protocol.Plugins;
 using System;
 using TaletApi.Models;
@@ -56,7 +57,12 @@ namespace TaletApi.Controllers
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
             var user = await _db.Users.FirstOrDefaultAsync(u => u.UserName == request.UserName);
-            if (user == null || !string.IsNullOrWhiteSpace(request.Password)||!BycryptService.VerifyPassword(user.PasswordHash, request.Password))
+            _logger.LogInformation(BycryptService.VerifyPassword(user.PasswordHash, request.Password).ToString());
+
+         
+
+
+            if (user == null || string.IsNullOrWhiteSpace(request.Password)||!BycryptService.VerifyPassword(user.PasswordHash, request.Password))
             {
                 return Unauthorized("Invalid Credentials");
             }
@@ -67,9 +73,7 @@ namespace TaletApi.Controllers
 
             Response.Cookies.Append("jwt", token, new CookieOptions
             {
-                // Domain = "localhost",
-                // Path = "/",
-                HttpOnly = false, // Prevents JavaScript from accessing the cookie
+                HttpOnly = true, // Prevents JavaScript from accessing the cookie
                 SameSite = SameSiteMode.None, // Improve CSRF protection
                 Secure = true, // Send the cookie over HTTPS only in production
                 MaxAge = TimeSpan.FromDays(7) // Adjust the token expiration time as needed
@@ -104,17 +108,6 @@ namespace TaletApi.Controllers
             return Ok("Logout successful");
         }
 
-
-        [HttpGet("currentUser")]
-        [Authorize]
-        public IActionResult GetCurrentUser()
-
-        {
-
-
-            return Ok("protectec Route");
-
-        }
 
         //[HttpPost("signInWithGoogle")]
         //public async Task<IActionResult> GoogleLogin([FromBody] object request)
