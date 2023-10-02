@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TaletApi.Extentions;
@@ -24,6 +25,7 @@ namespace TaletApi.Controllers
         }
         // GET: api/Stats
         [HttpGet("pieTotalStats")]
+        [Authorize]
         public async Task<IActionResult> GetAllStats()
         {
             var totalSales = _db.Sales.Count();
@@ -43,6 +45,7 @@ namespace TaletApi.Controllers
         }
 
         [HttpGet("barStoresStats")]
+        [Authorize]
         public async Task<IActionResult> GetAllStoresStat()
         {
 
