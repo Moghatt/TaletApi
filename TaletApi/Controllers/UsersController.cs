@@ -109,17 +109,6 @@ namespace TaletApi.Controllers
         }
 
 
-        [HttpGet("currentUser")]
-        [Authorize]
-        public IActionResult GetCurrentUser()
-
-        {
-
-
-            return Ok("protectec Route");
-
-        }
-
         //[HttpPost("signInWithGoogle")]
         //public async Task<IActionResult> GoogleLogin([FromBody] object request)
         //{
